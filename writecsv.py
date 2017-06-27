@@ -12,9 +12,9 @@ list_of_files = ('./Facebook Insights Data Export_010115_061515.xml',
 )
 
 
-def parseXML(file):
+def parseXML(file, tab, columns):
     file_prefix = file[24:-4]
-    writer = csv.writer(open(file_prefix+".csv", 'w'))
+    writer = csv.writer(open(file_prefix + tab + ".csv", 'w'))
     handler = open(file).read()
     soup = Soup(handler,"lxml")
     this_rec = []
@@ -31,9 +31,13 @@ def parseXML(file):
         else:
             this_rec.append('')
 
-        if len(this_rec) == 19 and this_rec[11] != "Lifetime Total Video Views":
-            writer.writerow(this_rec)
-            this_rec = []
+        if tab == 1:
+            if len(this_rec) == 19 and this_rec[11] != "Lifetime Total Video Views":
+                writer.writerow(this_rec)
+                this_rec = []
+        else:
+            if len(this_rec == 16):
+                writer.writerow(this_rec)
 
 if __name__ == '__main__':
     for item in list_of_files:
