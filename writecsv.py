@@ -4,14 +4,15 @@ from iso8601utils import parsers
 from bs4 import BeautifulSoup as Soup
 
 filenames = [
-    'Facebook Insights Data Export_010116_061516.xml',
-    'Facebook Insights Data Export_061615_113015.xml',
-    'Facebook Insights Data Export_061616_113016.xml',
-    'Facebook Insights Data Export_120115_123115.xml',
+    # add your xml file names with path here in quotes, proceeded by a comma
+    # for example, files in the same directory as this file would be
+    # 'sample_file1.xml', 'sample_file2.xml'
 ]
 
 
 def parseXML(filename):
+    # the prefix is the name of your file without the extention
+    # example: sample_file1
     file_prefix = filename[:-4]
 
     handler = open(filename).read()
@@ -26,7 +27,7 @@ def parseXML(filename):
         ws_name = dict(ws.attrs)['ss:name']
 
         writer = csv.writer(open(file_prefix + "_" + ws_name + ".csv", 'w'))
-        print("processing ", file_prefix + "_" + ws_name)
+        print("processing ", file_prefix + "_" + ws_name + "as a csv file...")
 
         columns = int(dict(ws.find('table').attrs)['ss:expandedcolumncount'])
         this_rec = []
