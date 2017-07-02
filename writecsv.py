@@ -5,10 +5,10 @@ from bs4 import BeautifulSoup as Soup
 
 filenames = [
     'Facebook Insights Data Export_010115_061515.xml',
-    'Facebook Insights Data Export_010116_061516.xml',
-    'Facebook Insights Data Export_061615_113015.xml',
-    'Facebook Insights Data Export_061616_113016.xml',
-    'Facebook Insights Data Export_120115_123115.xml',
+    # 'Facebook Insights Data Export_010116_061516.xml',
+    # 'Facebook Insights Data Export_061615_113015.xml',
+    # 'Facebook Insights Data Export_061616_113016.xml',
+    # 'Facebook Insights Data Export_120115_123115.xml',
 ]
 
 
@@ -82,17 +82,18 @@ def parseXML(filename):
         for record in ws.findAll("data"):
             this_rec = []
             rec_attrs = dict(record.attrs)
-            if len(record.contents) != 0:
-                if rec_attrs['ss:type'] == "Number":
-                    this_rec.append(float(record.contents[0]))
-                if rec_attrs['ss:type'] == "DateTime":
-                    this_rec.append(parsers.datetime(record.contents[0]))
-                if rec_attrs['ss:type'] == "String":
-                    this_rec.append(record.contents[0])
-            else:
-                this_rec.append('')
-            writer.writerow(this_rec)
-            this_rec = []
+            for i in range(0, len(record.contents)):
+                if len(record.contents) != 0:
+                    if rec_attrs['ss:type'] == "Number":
+                        this_rec.append(float(record.contents[0]))
+                    if rec_attrs['ss:type'] == "DateTime":
+                        this_rec.append(parsers.datetime(record.contents[0]))
+                    if rec_attrs['ss:type'] == "String":
+                        this_rec.append(record.contents[0])
+                else:
+                    this_rec.append('')
+                writer.writerow(this_rec)
+                this_rec = []
 
 
 if __name__ == '__main__':
