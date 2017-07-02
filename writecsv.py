@@ -78,22 +78,30 @@ def parseXML(filename):
     for ws in worksheet:
         ws_name = dict(ws.attrs)['ss:name']
         writer = csv.writer(open(file_prefix + "_" + ws_name + ".csv", 'w'))
+        print("processing ", file_prefix + "_" + ws_name)
+
+        columns = int(dict(ws.find('table').attrs)['ss:expandedcolumncount'])
+        this_rec = []
 
         for record in ws.findAll("data"):
-            this_rec = []
             rec_attrs = dict(record.attrs)
-            for i in range(0, len(record.contents)):
-                if len(record.contents) != 0:
-                    if rec_attrs['ss:type'] == "Number":
-                        this_rec.append(float(record.contents[0]))
-                    if rec_attrs['ss:type'] == "DateTime":
-                        this_rec.append(parsers.datetime(record.contents[0]))
-                    if rec_attrs['ss:type'] == "String":
-                        this_rec.append(record.contents[0])
-                else:
-                    this_rec.append('')
-                writer.writerow(this_rec)
-                this_rec = []
+            if len(record.contents) != 0:
+                if rec_attrs['ss:type'] == "Number":
+                    this_rec.append(float(record.contents[0]))
+                if rec_attrs['ss:type'] == "DateTime":
+                    this_rec.append(parsers.datetime(record.contents[0]))
+                if rec_attrs['ss:type'] == "String":
+                    this_rec.append(record.contents[0])
+
+            else:
+                this_rec.append('')
+
+            print(this_rec)
+
+            # if len(this_rec) == columns:
+            #     print(this_rec)
+            # else:
+            #     continue
 
 
 if __name__ == '__main__':
