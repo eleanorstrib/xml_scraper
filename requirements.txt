@@ -1,0 +1,2 @@
+beautifulsoup4==4.5.3
+iso8601utils==0.1.2
